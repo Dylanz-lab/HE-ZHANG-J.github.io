@@ -3,6 +3,8 @@
   const t = JSON.parse(document.getElementById('pageData').textContent);
   const $ = id => document.getElementById(id);
   const root = new URL(document.body.dataset.root || './', document.baseURI);
+  const typeTune = document.createElement('link');
+  typeTune.rel = 'stylesheet'; typeTune.href = new URL('assets/type-tune.css?v=0.3.3', root).href; document.head.appendChild(typeTune);
   const params = new URLSearchParams(location.search);
   const qa = params.get('qa') === '1';
   const isFile = document.body.dataset.offline === '1' || ['file:', 'about:'].includes(location.protocol);
