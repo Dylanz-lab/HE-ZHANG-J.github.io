@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Verify a person across the public web. Preview public profiles, image appearances, and identity signals in one place." />
+  <meta name="robots" content="index,follow" />
+  <title>VeriScope — Public Identity Research</title>
+  <style>
+    :root{--bg:#07111f;--panel:#0d1a2b;--panel2:#101f33;--text:#f4f8ff;--muted:#93a4b8;--line:rgba(255,255,255,.09);--brand:#65e6c4;--brand2:#74a9ff;--danger:#ffb1a5;--shadow:0 24px 80px rgba(0,0,0,.35)}
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:radial-gradient(circle at 20% -10%,rgba(116,169,255,.18),transparent 34%),radial-gradient(circle at 85% 10%,rgba(101,230,196,.12),transparent 32%),var(--bg);color:var(--text);font:15px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    a{color:inherit;text-decoration:none} button,input{font:inherit}.wrap{max-width:1120px;margin:auto;padding:0 24px}.nav{height:72px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}
+    .logo{display:flex;gap:10px;align-items:center;font-weight:800;letter-spacing:-.02em}.mark{width:31px;height:31px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand2));display:grid;place-items:center;color:#07111f;font-weight:900;box-shadow:0 8px 28px rgba(101,230,196,.2)}
+    .navlinks{display:flex;gap:20px;align-items:center;color:var(--muted)}.pill{padding:9px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.035);cursor:pointer}.pill:hover{border-color:rgba(101,230,196,.35);color:#fff}
+    .hero{padding:80px 0 44px;text-align:center}.eyebrow{display:inline-flex;gap:7px;align-items:center;border:1px solid rgba(101,230,196,.25);background:rgba(101,230,196,.07);color:#bff8e8;padding:7px 11px;border-radius:999px;font-size:13px}.dot{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 15px var(--brand)}
+    h1{font-size:clamp(42px,7vw,74px);line-height:1.01;letter-spacing:-.055em;max-width:900px;margin:22px auto 18px}.grad{background:linear-gradient(90deg,#fff 0%,#b5d1ff 46%,#a9f3df 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.sub{max-width:690px;margin:0 auto;color:var(--muted);font-size:18px}
+    .searchcard{max-width:820px;margin:38px auto 0;padding:10px;border-radius:22px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid var(--line);box-shadow:var(--shadow);text-align:left}.searchinner{padding:24px;border-radius:16px;background:rgba(7,17,31,.83);backdrop-filter:blur(18px)}
+    .tabs{display:flex;gap:8px;margin-bottom:17px}.tab{padding:8px 12px;border-radius:10px;background:transparent;border:1px solid transparent;color:var(--muted)}.tab.active{background:rgba(101,230,196,.08);border-color:rgba(101,230,196,.2);color:#dffbf3}
+    .upload{border:1px dashed rgba(255,255,255,.18);border-radius:15px;padding:28px;text-align:center;cursor:pointer;transition:.2s;background:rgba(255,255,255,.018)}.upload:hover{border-color:rgba(101,230,196,.45);background:rgba(101,230,196,.035)}.upload strong{display:block;font-size:17px}.upload span{color:var(--muted);font-size:13px}.uploadicon{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,rgba(101,230,196,.16),rgba(116,169,255,.14));margin:0 auto 12px;display:grid;place-items:center;font-size:20px}.upload input{display:none}
+    .fine{display:flex;justify-content:center;gap:7px;align-items:center;color:#7f92aa;font-size:12px;margin-top:12px}.actions{display:flex;gap:10px;margin-top:15px}.btn{border:0;border-radius:12px;padding:12px 16px;cursor:pointer;font-weight:700}.btn.primary{flex:1;background:linear-gradient(90deg,var(--brand),#8ae8ff);color:#062018}.btn.secondary{background:rgba(255,255,255,.06);color:#d9e4f2;border:1px solid var(--line)}.btn:hover{transform:translateY(-1px)}
+    .trust{display:flex;justify-content:center;gap:30px;flex-wrap:wrap;color:#7f92aa;font-size:13px;margin:25px 0 0}.trust b{color:#c9d8e9;font-weight:650}
+    .section{padding:74px 0}.sectionhead{max-width:680px}.sectionhead h2{font-size:38px;letter-spacing:-.04em;margin:0 0 10px}.sectionhead p{color:var(--muted);margin:0;font-size:17px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.02));border-radius:18px;padding:23px}.card .ico{width:38px;height:38px;border-radius:11px;background:rgba(116,169,255,.1);display:grid;place-items:center;margin-bottom:28px}.card h3{margin:0 0 7px;font-size:18px}.card p{margin:0;color:var(--muted)}
+    .report{margin-top:34px;display:grid;grid-template-columns:.82fr 1.18fr;gap:18px}.profile,.reportbody{border:1px solid var(--line);border-radius:20px;background:rgba(13,26,43,.75);padding:24px}.avatar{width:70px;height:70px;border-radius:18px;background:radial-gradient(circle at 45% 32%,#c8d6e8 0 14%,transparent 15%),radial-gradient(ellipse at 50% 77%,#8ea5be 0 31%,transparent 32%),linear-gradient(145deg,#19304c,#1b4550);margin-bottom:16px}.label{color:#71859e;font-size:12px;text-transform:uppercase;letter-spacing:.1em}.profile h3{font-size:23px;margin:4px 0}.verified{color:#8ff1d5}.mini{margin-top:22px;display:grid;gap:11px}.minirow{display:flex;justify-content:space-between;padding-top:11px;border-top:1px solid var(--line);color:var(--muted)}.minirow b{color:#dce8f5;font-weight:600}.score{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;color:#c4f8e9;background:rgba(101,230,196,.08);border:1px solid rgba(101,230,196,.18);font-size:12px}
+    .reportbody h3{margin:13px 0 7px;font-size:22px}.reportbody p{color:var(--muted)}.signal{display:flex;gap:13px;padding:15px 0;border-top:1px solid var(--line)}.signal:first-of-type{margin-top:17px}.sicon{min-width:35px;height:35px;border-radius:10px;background:rgba(116,169,255,.1);display:grid;place-items:center}.signal strong{display:block}.signal span{color:var(--muted);font-size:13px}.sampletag{color:#ffdcb1;background:rgba(255,180,100,.08);border:1px solid rgba(255,180,100,.18);padding:5px 9px;border-radius:999px;font-size:11px;float:right}
+    .pricing{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:30px}.price{border:1px solid var(--line);border-radius:20px;padding:26px;background:rgba(255,255,255,.025)}.price.featured{border-color:rgba(101,230,196,.32);background:linear-gradient(180deg,rgba(101,230,196,.07),rgba(255,255,255,.025))}.price h3{margin:0}.amount{font-size:38px;font-weight:800;letter-spacing:-.04em;margin:13px 0 4px}.amount small{font-size:14px;color:var(--muted);font-weight:500}.price ul{padding:0;list-style:none;color:var(--muted);display:grid;gap:9px;margin:22px 0}.price li:before{content:"✓";color:var(--brand);margin-right:9px}.wide{width:100%}
+    .footer{padding:45px 0 60px;border-top:1px solid var(--line);color:#7588a0;font-size:13px}.footflex{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}.modal{position:fixed;inset:0;background:rgba(2,7,15,.72);display:none;place-items:center;padding:24px;z-index:20;backdrop-filter:blur(8px)}.modal.show{display:grid}.modalbox{max-width:500px;width:100%;border:1px solid var(--line);background:#0b1829;border-radius:22px;padding:28px;box-shadow:var(--shadow)}.modalbox h3{font-size:25px;margin:0 0 8px}.modalbox p{color:var(--muted)}.modalactions{display:flex;gap:10px;margin-top:20px}
+    #previewNotice{display:none;margin-top:16px;padding:13px 14px;border:1px solid rgba(101,230,196,.2);background:rgba(101,230,196,.06);border-radius:12px;color:#bff6e6}#previewNotice.show{display:block}
+    @media(max-width:760px){.navlinks a{display:none}.hero{padding-top:54px}.grid,.report,.pricing{grid-template-columns:1fr}.actions{flex-direction:column}.section{padding:54px 0}.searchinner{padding:17px}.upload{padding:23px 14px}.trust{gap:14px}.sampletag{float:none;display:inline-block;margin-bottom:10px}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="logo" href="#"><span class="mark">V</span><span>VeriScope</span></a>
+      <div class="navlinks"><a href="#how">How it works</a><a href="#sample">Sample report</a><button class="pill" id="marketToggle">日本語</button></div>
+    </nav>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span class="dot"></span><span data-i18n="eyebrow">Public-web identity research</span></div>
+        <h1 class="grad" data-i18n="headline">Know who you're dealing with online.</h1>
+        <p class="sub" data-i18n="sub">Search public sources by photo and understand where a person appears online, which profiles may belong to them, and whether the story is consistent.</p>
+
+        <div class="searchcard">
+          <div class="searchinner">
+            <div class="tabs"><button class="tab active" data-i18n="photo">Photo</button><button class="tab" disabled>Name</button><button class="tab" disabled>Username</button><button class="tab" disabled>Profile URL</button></div>
+            <label class="upload" for="photoInput" id="uploadZone">
+              <div class="uploadicon">⌁</div>
+              <strong data-i18n="uploadTitle">Drop a photo here or choose an image</strong>
+              <span data-i18n="uploadSub">JPG, PNG or WEBP · Preview mode</span>
+              <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp" />
+            </label>
+            <div class="fine">🔒 <span data-i18n="privacy">This validation preview does not upload or store your image.</span></div>
+            <div id="previewNotice" data-i18n="previewNotice">Interest recorded. Live public-web search is not enabled in this validation preview yet.</div>
+            <div class="actions"><button class="btn primary" id="startBtn" data-i18n="start">Start identity check</button><button class="btn secondary" id="sampleBtn" data-i18n="sample">See sample report</button></div>
+          </div>
+        </div>
+        <div class="trust"><span>✓ <b data-i18n="publicOnly">Public sources only</b></span><span>✓ <b data-i18n="cited">Source-linked results</b></span><span>✓ <b data-i18n="noSensitive">No sensitive-trait profiling</b></span></div>
+      </section>
+
+      <section class="section" id="how">
+        <div class="sectionhead"><h2 data-i18n="howTitle">From a photo to a clearer picture.</h2><p data-i18n="howSub">A people-intelligence layer designed to connect public evidence, not just return visually similar images.</p></div>
+        <div class="grid">
+          <div class="card"><div class="ico">◎</div><h3 data-i18n="f1t">Find public appearances</h3><p data-i18n="f1p">Surface webpages where a matching face may appear and keep the original source attached.</p></div>
+          <div class="card"><div class="ico">⌘</div><h3 data-i18n="f2t">Resolve possible identity</h3><p data-i18n="f2p">Combine names, profiles, work history and public context into likely identity candidates.</p></div>
+          <div class="card"><div class="ico">◇</div><h3 data-i18n="f3t">Explain confidence</h3><p data-i18n="f3p">Show what agrees, what conflicts and why a match may or may not be trustworthy.</p></div>
+        </div>
+      </section>
+
+      <section class="section" id="sample">
+        <div class="sectionhead"><h2 data-i18n="sampleTitle">A report you can actually reason with.</h2><p data-i18n="sampleSub">Not a black-box “match”. Every conclusion is meant to point back to public evidence.</p></div>
+        <div class="report">
+          <div class="profile"><span class="sampletag" data-i18n="sampleTag">SAMPLE DATA</span><div class="avatar"></div><div class="label" data-i18n="possibleIdentity">Possible identity</div><h3>Alex Morgan</h3><div class="verified">● 86% identity confidence</div><div class="mini"><div class="minirow"><span>Public profiles</span><b>7 found</b></div><div class="minirow"><span>Image appearances</span><b>24 sources</b></div><div class="minirow"><span>Location consistency</span><b>High</b></div><div class="minirow"><span>Timeline conflicts</span><b>1 signal</b></div></div></div>
+          <div class="reportbody"><span class="score">AI evidence summary</span><h3 data-i18n="summaryTitle">Likely the same person across multiple public sources.</h3><p data-i18n="summaryBody">Name, employer and location signals are broadly consistent across public profile pages. One older profile contains a conflicting job date and should be verified independently.</p><div class="signal"><div class="sicon">↗</div><div><strong>LinkedIn-style professional page</strong><span>Employer and education match · public source</span></div></div><div class="signal"><div class="sicon">⌁</div><div><strong>Image appearance</strong><span>Same face appears in an event gallery · public source</span></div></div><div class="signal"><div class="sicon">!</div><div><strong>Timeline inconsistency</strong><span>One profile lists a role 8 months earlier than other sources</span></div></div><button class="btn secondary wide" id="sampleDeepBtn" data-i18n="exploreSample">Explore full sample report</button></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="sectionhead"><h2 data-i18n="pricingTitle">Would this be worth paying for?</h2><p data-i18n="pricingSub">We're testing demand before opening live search. These are candidate prices, not a current charge.</p></div>
+        <div class="pricing">
+          <div class="price featured"><div class="label" data-i18n="oneOff">ONE-OFF</div><h3 data-i18n="fullReport">Full identity report</h3><div class="amount" id="onePrice">$7.99 <small>/ report</small></div><ul><li>Public face matches</li><li>Likely profiles & sources</li><li>AI evidence summary</li><li>Inconsistency signals</li></ul><button class="btn primary wide intentBtn" data-plan="report" data-i18n="unlock">Unlock full report</button></div>
+          <div class="price"><div class="label" data-i18n="monitoring">MONITORING</div><h3 data-i18n="monitorTitle">Identity monitoring</h3><div class="amount" id="subPrice">$19.99 <small>/ month</small></div><ul><li>Everything in reports</li><li>New image alerts</li><li>Impersonation monitoring</li><li>Digital-footprint changes</li></ul><button class="btn secondary wide intentBtn" data-plan="monitor" data-i18n="request">Request early access</button></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer"><div class="footflex"><div>© 2026 VeriScope · Demand-validation preview</div><div data-i18n="footer">Public-web research concept. No live biometric search is performed on this page.</div></div></footer>
+  </div>
+
+  <div class="modal" id="modal"><div class="modalbox"><h3 data-i18n="modalTitle">Thanks — that signal matters.</h3><p data-i18n="modalBody">This is an early demand-validation page, so checkout and live search are intentionally not enabled yet. Your click helps us decide what to build first.</p><div class="modalactions"><button class="btn primary" id="closeModal" data-i18n="close">Got it</button><button class="btn secondary" id="switchMarket" data-i18n="jpVersion">View Japanese version</button></div></div></div>
+
+  <script>
+    // Validation analytics: simple anonymous counters only. No image or personal data is sent.
+    const COUNTER_BASE='https://countapi.mileshilliard.com/api/v1/hit/';
+    const PREFIX='veriscope-v1-20260911';
+    const texts={
+      en:{eyebrow:'Public-web identity research',headline:"Know who you're dealing with online.",sub:'Search public sources by photo and understand where a person appears online, which profiles may belong to them, and whether the story is consistent.',photo:'Photo',uploadTitle:'Drop a photo here or choose an image',uploadSub:'JPG, PNG or WEBP · Preview mode',privacy:'This validation preview does not upload or store your image.',previewNotice:'Interest recorded. Live public-web search is not enabled in this validation preview yet.',start:'Start identity check',sample:'See sample report',publicOnly:'Public sources only',cited:'Source-linked results',noSensitive:'No sensitive-trait profiling',howTitle:'From a photo to a clearer picture.',howSub:'A people-intelligence layer designed to connect public evidence, not just return visually similar images.',f1t:'Find public appearances',f1p:'Surface webpages where a matching face may appear and keep the original source attached.',f2t:'Resolve possible identity',f2p:'Combine names, profiles, work history and public context into likely identity candidates.',f3t:'Explain confidence',f3p:'Show what agrees, what conflicts and why a match may or may not be trustworthy.',sampleTitle:'A report you can actually reason with.',sampleSub:'Not a black-box “match”. Every conclusion is meant to point back to public evidence.',sampleTag:'SAMPLE DATA',possibleIdentity:'Possible identity',summaryTitle:'Likely the same person across multiple public sources.',summaryBody:'Name, employer and location signals are broadly consistent across public profile pages. One older profile contains a conflicting job date and should be verified independently.',exploreSample:'Explore full sample report',pricingTitle:'Would this be worth paying for?',pricingSub:"We're testing demand before opening live search. These are candidate prices, not a current charge.",oneOff:'ONE-OFF',fullReport:'Full identity report',monitoring:'MONITORING',monitorTitle:'Identity monitoring',unlock:'Unlock full report',request:'Request early access',modalTitle:'Thanks — that signal matters.',modalBody:'This is an early demand-validation page, so checkout and live search are intentionally not enabled yet. Your click helps us decide what to build first.',close:'Got it',jpVersion:'View Japanese version',footer:'Public-web research concept. No live biometric search is performed on this page.'},
+      jp:{eyebrow:'公開Webの人物・本人確認リサーチ',headline:'オンラインで出会った相手を、もっと確かに。',sub:'写真を起点に公開情報を横断し、人物がどこに現れるか、どのプロフィールが同一人物らしいか、情報に矛盾がないかをまとめて確認します。',photo:'写真',uploadTitle:'写真をドロップ、または画像を選択',uploadSub:'JPG / PNG / WEBP · プレビューモード',privacy:'この検証ページでは画像をアップロード・保存しません。',previewNotice:'ご関心を記録しました。現在は需要検証中のため、ライブ検索はまだ有効化していません。',start:'本人チェックを開始',sample:'サンプルレポートを見る',publicOnly:'公開情報のみ',cited:'出典つきの結果',noSensitive:'センシティブ属性は推定しません',howTitle:'写真から、人物像をもっと明確に。',howSub:'似た画像を返すだけではなく、公開情報をつなげて根拠を整理する People Intelligence レイヤーです。',f1t:'公開Web上の出現を探す',f1p:'一致する可能性のある顔が掲載されたWebページを、元の出典と一緒に確認します。',f2t:'人物候補を整理する',f2p:'名前、プロフィール、職歴、公開コンテキストから同一人物らしい候補をまとめます。',f3t:'確信度の根拠を説明',f3p:'一致する点、矛盾する点、なぜ信頼できる／できないかを見える化します。',sampleTitle:'根拠を追える人物レポート。',sampleSub:'ブラックボックスな「一致」ではなく、結論から公開情報の根拠までたどれる設計です。',sampleTag:'サンプルデータ',possibleIdentity:'人物候補',summaryTitle:'複数の公開情報で同一人物である可能性が高いです。',summaryBody:'氏名、勤務先、地域のシグナルは概ね一致しています。一方、古いプロフィールの職歴開始日に矛盾があり、追加確認が推奨されます。',exploreSample:'サンプル詳細を見る',pricingTitle:'このレポートにお金を払いますか？',pricingSub:'ライブ検索公開前の需要検証です。表示価格は候補価格で、現在課金は発生しません。',oneOff:'1回購入',fullReport:'人物リサーチレポート',monitoring:'モニタリング',monitorTitle:'デジタル身元モニタリング',unlock:'フルレポートを開く',request:'先行アクセスを希望',modalTitle:'ありがとうございます。重要なシグナルです。',modalBody:'現在は需要検証中のため、決済とライブ検索はまだ有効化していません。このクリックをもとに、最初に作る機能を決めます。',close:'閉じる',jpVersion:'英語版を見る',footer:'公開Webリサーチのコンセプト検証です。このページ上ではライブ顔検索を行いません。'}
+    };
+    const params=new URLSearchParams(location.search);let market=(params.get('market')||'us').toLowerCase();let lang=market==='jp'?'jp':'en';
+    function count(event){const key=`${PREFIX}-${market}-${event}`;fetch(COUNTER_BASE+encodeURIComponent(key),{mode:'no-cors',keepalive:true}).catch(()=>{});}
+    function applyLang(){document.documentElement.lang=lang==='jp'?'ja':'en';document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.dataset.i18n;if(texts[lang][k])el.textContent=texts[lang][k]});document.getElementById('marketToggle').textContent=lang==='jp'?'English':'日本語';document.getElementById('onePrice').innerHTML=lang==='jp'?'¥980 <small>/ report</small>':'$7.99 <small>/ report</small>';document.getElementById('subPrice').innerHTML=lang==='jp'?'¥1,980 <small>/ month</small>':'$19.99 <small>/ month</small>';}
+    function setMarket(next){market=next;lang=market==='jp'?'jp':'en';const u=new URL(location.href);u.searchParams.set('market',market);history.replaceState({},'',u);applyLang();count('market_switch');}
+    applyLang();count('pageview');
+    document.getElementById('marketToggle').onclick=()=>setMarket(lang==='jp'?'us':'jp');
+    document.getElementById('photoInput').addEventListener('change',e=>{if(e.target.files&&e.target.files[0]){count('photo_selected');document.getElementById('previewNotice').classList.add('show');}});
+    document.getElementById('startBtn').onclick=()=>{count('start_click');document.getElementById('photoInput').click();};
+    document.getElementById('sampleBtn').onclick=()=>{count('sample_click');document.getElementById('sample').scrollIntoView({behavior:'smooth'});};
+    document.getElementById('sampleDeepBtn').onclick=()=>{count('sample_deep_click');document.getElementById('modal').classList.add('show');};
+    document.querySelectorAll('.intentBtn').forEach(btn=>btn.onclick=()=>{count(btn.dataset.plan==='report'?'unlock_report_click':'monitor_interest_click');document.getElementById('modal').classList.add('show');});
+    document.getElementById('closeModal').onclick=()=>document.getElementById('modal').classList.remove('show');
+    document.getElementById('switchMarket').onclick=()=>{document.getElementById('modal').classList.remove('show');setMarket(lang==='jp'?'us':'jp');};
+    document.getElementById('modal').addEventListener('click',e=>{if(e.target.id==='modal')e.currentTarget.classList.remove('show')});
+  </script>
+</body>
+</html>
