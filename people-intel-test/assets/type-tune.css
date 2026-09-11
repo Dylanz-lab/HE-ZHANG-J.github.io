@@ -1,0 +1,95 @@
+/* V0.3.3 readability pass — typography only; layout and palette stay unchanged. */
+.nav-middle{font-size:14px}
+.lang{font-size:13px}
+.nav-cta{font-size:13px}
+.eyebrow{font-size:12px}
+.hero-copy>p{font-size:18px}
+.button{font-size:14px}
+.micro{font-size:12px!important}
+.photo-label{font-size:12px}
+.photo-tag{font-size:10px}
+.floating b{font-size:13px}
+.floating small{font-size:11px}
+.floating.count b{font-size:12px}
+.stage-caption{font-size:10px}
+.value-strip>div{font-size:13px}
+.section-heading p{font-size:15px}
+.demo-title{font-size:14px}
+.demo-top-right{font-size:11px}
+.badge{font-size:10px}
+.list-caption{font-size:10px}
+.result strong{font-size:14px}
+.result small{font-size:11px}
+.result-tag{font-size:10px}
+.detail-kicker{font-size:11px}
+.result-detail h3{font-size:28px}
+.result-detail>p{font-size:14px}
+.facts dt{font-size:10px}
+.facts dd{font-size:13px}
+.evidence-button{font-size:12px}
+.next-step{font-size:12px}
+.demo-bottom{font-size:11px}
+.step-no{font-size:12px}
+.workflow h3{font-size:14px}
+.workflow p{font-size:13px}
+.mini-article b{font-size:14px}
+.mini-article small{font-size:10px}
+.sticky small{font-size:10px}
+.sticky p{font-size:15px}
+.story-copy p{font-size:16px}
+.pricing-copy p{font-size:16px}
+.price-top h3{font-size:16px}
+.price-amount span{font-size:13px}
+.price-features li{font-size:13px}
+.price-note{font-size:11px}
+.faq p{font-size:14px}
+.faq summary{font-size:14px}
+.faq details p{font-size:13px}
+.footer small{font-size:11px}
+.footer-right{font-size:12px}
+.modal-head{font-size:13px}
+.browser-address{font-size:12px}
+.source-page header{font-size:22px}
+.source-preview h3{font-size:25px}
+.source-preview p{font-size:14px}
+.sample-note{font-size:12px}
+.join-modal .lead{font-size:14px}
+.form-field{font-size:13px}
+.consent-check{font-size:12px}
+.form-status{font-size:13px}
+.preview-banner{font-size:12px}
+.consent-panel p{font-size:13px}
+.consent-panel strong{font-size:14px}
+.consent-panel .button{font-size:12px}
+html[lang=ja] .hero-copy>p{font-size:16px}
+@media(max-width:760px){
+  .hero-copy>p{font-size:16px}
+  .eyebrow{font-size:11px}
+  .photo-label{font-size:10px}
+  .photo-tag{font-size:9px}
+  .floating b{font-size:11px}
+  .floating small{font-size:9px}
+  .floating.count b{font-size:11px}
+  .stage-caption{font-size:9px}
+  .value-strip>div{font-size:11px}
+  .section-heading p{font-size:14px}
+  .demo-title{font-size:12px}
+  .badge{font-size:9px}
+  .list-caption{font-size:10px}
+  .result strong{font-size:11px}
+  .result small{font-size:9px}
+  .result-tag{font-size:9px}
+  .result-detail h3{font-size:27px}
+  .result-detail>p{font-size:13px}
+  .demo-bottom{font-size:10px}
+  .workflow h3{font-size:14px}
+  .workflow p{font-size:13px}
+  .sticky p{font-size:14px}
+  .story-copy p{font-size:15px}
+  .pricing-copy p{font-size:15px}
+  .faq summary{font-size:14px}
+  .footer-right{font-size:11px}
+  .source-preview p{font-size:12px}
+  html[lang=ja] .hero-copy>p{font-size:16px}
+}
+@media(max-width:355px){.hero .button{font-size:13px}}
