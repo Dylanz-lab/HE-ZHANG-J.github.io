@@ -14,6 +14,7 @@ if (config.mode === 'preview') {
 } else if (config.mode === 'live') {
   assert.equal(config.waitlistEnabled, true, 'live mode must explicitly enable the waitlist');
   assert.match(config.waitlistEndpoint, execPattern, 'live mode requires an Apps Script /exec URL');
+  assert.match(config.contactEmail, /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'live mode requires a support contact email');
 } else {
   assert.fail('mode must be preview or live');
 }

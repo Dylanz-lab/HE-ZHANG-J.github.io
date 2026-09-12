@@ -1,9 +1,9 @@
 {
   "version": "0.3",
-  "mode": "preview",
-  "waitlistEnabled": false,
-  "waitlistEndpoint": "",
+  "mode": "live",
+  "waitlistEnabled": true,
+  "waitlistEndpoint": "https://script.google.com/macros/s/AKfycbxC1j5U0rNvKCx2DpQw-fzL3qGIzXyRx4DXkec-My48ceTqyBP2cbkMnZZ-rIjHrM1BJw/exec",
   "analyticsEnabled": false,
   "apiBase": "",
-  "contactEmail": ""
+  "contactEmail": "jason_zhang_@outlook.com"
 }
