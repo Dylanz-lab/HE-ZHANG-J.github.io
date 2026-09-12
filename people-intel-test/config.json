@@ -2,7 +2,7 @@
   "version": "0.3",
   "mode": "live",
   "waitlistEnabled": true,
-  "waitlistEndpoint": "https://script.google.com/macros/s/AKfycbxC1j5U0rNvKCx2DpQw-fzL3qGIzXyRx4DXkec-My48ceTqyBP2cbkMnZZ-rIjHrM1BJw/exec",
+  "waitlistEndpoint": "https://script.google.com/macros/s/AKfycbzsAkMMk2aunxzs3zhFgl8bOGWW6BL2Yksgr-Sk15zY_CZyBCnmecKeiEDDKhnHFv8ieQ/exec",
   "analyticsEnabled": false,
   "apiBase": "",
   "contactEmail": "jason_zhang_@outlook.com"
