@@ -44,12 +44,13 @@ The current config is intentionally preview-only:
   "version": "0.3",
   "mode": "preview",
   "waitlistEnabled": false,
+  "waitlistEndpoint": "",
   "analyticsEnabled": false,
   "apiBase": "",
   "contactEmail": ""
 }
 ```
-Do not flip these flags until the real endpoint has been deployed and verified end-to-end.
+The waitlist integration code and Apps Script deployment guide are included, but production collection remains disabled. Do not flip these flags or set `waitlistEndpoint` until the real endpoint has been deployed and verified end-to-end.
 
 ## Next task: real Waitlist
 The next engineering task is to connect the existing waitlist form to a Google Sheet through a lightweight Google Apps Script Web App.
