@@ -1,6 +1,6 @@
 # VeriScope Waitlist Apps Script
 
-This code is the lightweight backend for the VeriScope early-access form. Bind it directly to the Google Sheet named `VeriScope Waitlist`; it reads and writes only its `Waitlist` tab.
+This code is the lightweight backend for the VeriScope early-access form. It reads and writes only the `Waitlist` tab in `VeriScope Waitlist`, using that spreadsheet's explicit ID so Web App executions do not rely on an active-sheet context.
 
 ## Before deployment
 

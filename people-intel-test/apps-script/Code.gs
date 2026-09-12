@@ -18,6 +18,7 @@ var VERISCOPE_LOCALES = ['en', 'ja'];
 var VERISCOPE_PLANS = ['usd_7_99', 'jpy_980'];
 var VERISCOPE_CONSENT_VERSION = 'v0.3-waitlist';
 var VERISCOPE_REQUEST_ID = /^[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
+var VERISCOPE_SPREADSHEET_ID = '1lkfeZiRqzo8XW8H0fM7K_yBhrQzFvA3Q2VUGatI40h0';
 
 function doPost(e) {
   var params = e && e.parameter ? e.parameter : {};
@@ -33,7 +34,7 @@ function doPost(e) {
     lock.waitLock(10000);
     hasLock = true;
 
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('Waitlist');
+    var sheet = SpreadsheetApp.openById(VERISCOPE_SPREADSHEET_ID).getSheetByName('Waitlist');
     assertHeaders_(sheet);
     if (hasNormalizedEmail_(sheet, input.email)) return receipt_(origin, requestId, 'duplicate');
 
