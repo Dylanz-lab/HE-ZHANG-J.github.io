@@ -9,7 +9,7 @@
   const qa = params.get('qa') === '1';
   const isFile = document.body.dataset.offline === '1' || ['file:', 'about:'].includes(location.protocol);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let config = { mode: 'preview', waitlistEnabled: false, analyticsEnabled: false, apiBase: '', contactEmail: '' };
+  let config = { mode: 'preview', waitlistEnabled: false, waitlistEndpoint: '', analyticsEnabled: false, apiBase: '', contactEmail: '' };
   let selected = 'profile';
   let session = null;
   let submitting = false;
@@ -95,7 +95,7 @@
   });
   function configureForm() {
     if ($('joinDialog').open) return formIsLive;
-    const live=config.mode==='live' && config.waitlistEnabled && !!config.contactEmail;
+    const live=config.mode==='live' && config.waitlistEnabled && !!config.contactEmail && !!window.VeriScopeWaitlistTransport && window.VeriScopeWaitlistTransport.isExecEndpoint(config.waitlistEndpoint);
     document.body.classList.toggle('live-ready',live);
     $('formNotice').textContent=live?t.livebanner:t.previewbanner;
     $('consentText').textContent=live?t.consent:t.previewconsent;
@@ -127,22 +127,30 @@
     }
     submitting=true; $('joinSubmit').disabled=true; $('joinSubmit').textContent=t.loading;
     $('formStatus').hidden=true;
-    const controller=new AbortController(); const timer=setTimeout(()=>controller.abort(),12000);
     try {
-      const response=await fetch(endpoint('api/waitlist'),{
-        method:'POST',credentials:'omit',headers:{'Content-Type':'application/json'},signal:controller.signal,
-        body:JSON.stringify({email:$('email').value.trim(),purpose:$('purpose').value,locale:t.locale,consent:$('emailConsent').checked,consent_version:'v0.3-launch-only',plan:t.locale==='ja'?'jpy_980':'usd_7_99',website:''})
+      const result=await window.VeriScopeWaitlistTransport.submit(config.waitlistEndpoint,{
+        email:$('email').value,
+        interest:$('purpose').value,
+        locale:t.locale,
+        utm_source:attribution.utm_source||'',
+        utm_medium:attribution.utm_medium||'',
+        utm_campaign:attribution.utm_campaign||'',
+        utm_content:attribution.utm_content||'',
+        plan:t.locale==='ja'?'jpy_980':'usd_7_99',
+        consent_version:'v0.3-waitlist',
+        website:$('website').value
       });
-      const result=await response.json();
-      if(!response.ok||result.ok!==true||result.saved!==true)throw Error('not-saved');
+      if(result.status!=='saved'&&result.status!=='duplicate')throw Error('not-saved');
       $('email').value=''; $('joinFields').hidden=true; $('joinSuccess').hidden=false;
-      $('successTitle').textContent=t.success; $('successBody').textContent=t.successbody;
+      const duplicate=result.status==='duplicate';
+      $('successTitle').textContent=duplicate?(t.locale==='ja'?'すでに公開案内に登録されています。':'You’re already on the early-access list.'):t.success;
+      $('successBody').textContent=duplicate?(t.locale==='ja'?'このメールアドレスはすでに保存されています。重複した登録は追加されていません。':'This email is already saved. We did not add a duplicate signup.'):t.successbody;
       $('joinDialog').setAttribute('aria-labelledby','successTitle'); $('successTitle').tabIndex=-1; $('successTitle').focus();
-      track('signup_complete',{plan:t.locale==='ja'?'jpy_980':'usd_7_99'},true);
+      track(duplicate?'signup_duplicate':'signup_complete',{plan:t.locale==='ja'?'jpy_980':'usd_7_99'},true);
     } catch(_) {
       $('formStatus').hidden=false; $('formStatus').className='form-status error'; $('formStatus').textContent=t.error;
       track('signup_error',{},false);
-    } finally {clearTimeout(timer);submitting=false; $('joinSubmit').disabled=false;$('joinSubmit').textContent=formIsLive?t.livesubmit:t.joinbtn;}
+    } finally {submitting=false; $('joinSubmit').disabled=false;$('joinSubmit').textContent=formIsLive?t.livesubmit:t.joinbtn;}
   });
   $('privacyOpen').addEventListener('click',()=>show('privacyDialog'));
   function openMeasurement() {
