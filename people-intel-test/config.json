@@ -3,7 +3,8 @@
   "mode": "live",
   "waitlistEnabled": true,
   "waitlistEndpoint": "https://script.google.com/macros/s/AKfycbzsAkMMk2aunxzs3zhFgl8bOGWW6BL2Yksgr-Sk15zY_CZyBCnmecKeiEDDKhnHFv8ieQ/exec",
-  "analyticsEnabled": false,
+  "analyticsEnabled": true,
+  "analyticsMeasurementId": "G-XGJ2Z6WWZN",
   "apiBase": "",
   "contactEmail": "jason_zhang_@outlook.com"
 }
