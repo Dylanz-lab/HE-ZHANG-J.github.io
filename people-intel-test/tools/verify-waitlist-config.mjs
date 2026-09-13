@@ -33,6 +33,7 @@ const script = read('apps-script/Code.gs');
 assert.match(script, /LockService\.getScriptLock\(\)/, 'Apps Script must lock duplicate lookup and write');
 assert.match(script, /getSheetByName\('Waitlist'\)/, 'Apps Script must target the Waitlist tab');
 assert.match(script, /VERISCOPE_ALLOWED_ORIGINS/, 'Apps Script must require approved parent origins');
+assert.match(script, /window\.top\.postMessage/, 'Apps Script receipt must target the top-level GitHub Pages window');
 
 const guide = read('apps-script/README.md');
 assert.match(guide, /VERISCOPE_ALLOWED_ORIGINS/, 'deployment guide must document allowed origins');

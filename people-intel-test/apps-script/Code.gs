@@ -144,6 +144,6 @@ function receipt_(origin, requestId, status) {
     status: status
   }).replace(/</g, '\\u003c');
   var targetOrigin = JSON.stringify(origin).replace(/</g, '\\u003c');
-  var html = '<!doctype html><meta charset="utf-8"><script>window.parent.postMessage(' + payload + ',' + targetOrigin + ');</script>';
+  var html = '<!doctype html><meta charset="utf-8"><script>window.top.postMessage(' + payload + ',' + targetOrigin + ');</script>';
   return HtmlService.createHtmlOutput(html).setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
 }
