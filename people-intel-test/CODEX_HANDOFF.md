@@ -4,16 +4,17 @@
 - Repository: `Dylanz-lab/HE-ZHANG-J.github.io`
 - Branch: **`master`** (not `main`)
 - Project directory: `people-intel-test/`
-- Live page: https://dylanz-lab.github.io/HE-ZHANG-J.github.io/people-intel-test/
+- Live EN page: https://dylanz-lab.github.io/HE-ZHANG-J.github.io/people-intel-test/
+- Live JA page: https://dylanz-lab.github.io/HE-ZHANG-J.github.io/people-intel-test/ja/
 
 ## Current baseline
-The current product baseline is **VeriScope V0.3.3**.
+The approved visual/product baseline remains **V0.3.3** (typography/readability pass), with **waitlist transport v0.3.4** fixes on top.
 
-At the time this handoff was created, the baseline commit before this handoff file was:
-`8985c69a4b420b8e60a383fc18e55f1d3fe38a17`
+Current production head before this handoff refresh:
+`f794353e05296b6a59ebf8174d6ef933d0a7d51d`
 
-That commit message is:
-`Load V0.3.3 typography readability tuning`
+Key recent fix:
+`fix: refresh waitlist receipt transport`
 
 Do not start from an older archive or preview file outside `people-intel-test/`.
 
@@ -22,58 +23,82 @@ Do not start from an older archive or preview file outside `people-intel-test/`.
 - `people-intel-test/ja/index.html` — Japanese production page
 - `people-intel-test/assets/style.css` — base visual styling
 - `people-intel-test/assets/type-tune.css` — V0.3.3 typography/readability overrides
-- `people-intel-test/assets/app.js` — client-side demo and form behavior
-- `people-intel-test/config.json` — production mode flags / endpoint configuration
+- `people-intel-test/assets/app.js` — client-side demo, funnel events and form behavior
+- `people-intel-test/assets/waitlist-core.js` — waitlist validation/receipt contract
+- `people-intel-test/assets/waitlist-transport.js` — Apps Script iframe/postMessage transport
+- `people-intel-test/apps-script/Code.gs` — deployed waitlist backend source of truth
+- `people-intel-test/config.json` — production mode / waitlist endpoint / analytics flags
 - `people-intel-test/sitemap.xml` — SEO sitemap
+- `people-intel-test/tests/` — waitlist unit tests
 - `people-intel-test/metrics.html` — setup/status page, not production analytics
 
-## Product state
+## Current verified product state
 - UI/layout/palette: approved baseline; avoid redesign unless explicitly requested.
 - Copy baseline: `Identity, in focus.`
 - EN + JA pages are live.
 - Demo interaction is live.
 - Typography was enlarged in V0.3.3 for readability.
-- Real waitlist is **not enabled yet**.
-- Public analytics is **not enabled yet**.
-- `config.json` currently keeps waitlist and analytics disabled.
+- **Real Waitlist is enabled and verified end-to-end.**
+- Production page → Google Apps Script → `VeriScope Waitlist` Google Sheet → confirmed receipt → success UI has been manually verified.
+- Duplicate handling, request IDs, origin validation, server-side email validation, honeypot, locking, UTM validation and Sheet-header validation are implemented.
+- Public production analytics is **still disabled**.
 
 ## Current config expectation
-The current config is intentionally preview-only:
+Production should remain live for waitlist collection while analytics stays off until a production analytics provider/endpoint is deliberately connected:
+
 ```json
 {
   "version": "0.3",
-  "mode": "preview",
-  "waitlistEnabled": false,
-  "waitlistEndpoint": "",
+  "mode": "live",
+  "waitlistEnabled": true,
+  "waitlistEndpoint": "<deployed Google Apps Script /exec URL>",
   "analyticsEnabled": false,
   "apiBase": "",
-  "contactEmail": ""
+  "contactEmail": "<contact email>"
 }
 ```
-The waitlist integration code and Apps Script deployment guide are included, but production collection remains disabled. Do not flip these flags or set `waitlistEndpoint` until the real endpoint has been deployed and verified end-to-end.
 
-## Next task: real Waitlist
-The next engineering task is to connect the existing waitlist form to a Google Sheet through a lightweight Google Apps Script Web App.
+Do not disable or replace the working Waitlist flow without an explicit reason and end-to-end re-verification.
 
-Expected sheet columns:
-`signup_time, email, interest, locale, country, utm_source, utm_medium, utm_campaign, utm_content, plan, consent_version, status`
+## Known limitation: country attribution
+The Waitlist Sheet currently writes `country = unknown` by design.
 
-Requirements:
-1. Validate email server-side.
-2. Deduplicate email addresses.
-3. Add honeypot/bot protection.
-4. Use a lock for concurrent submissions.
-5. Save only necessary fields; never save photos, filenames, face embeddings, or biometric data.
-6. `country` may remain `unknown` until there is a trustworthy source for geography.
-7. Capture UTM parameters.
-8. Show success only after the backend confirms the row was saved or already exists.
-9. On network/server error, show retry state; never fake success.
-10. Keep EN/JA behavior equivalent.
-11. Keep the Apps Script `/exec` URL configurable; do not hardcode secrets.
-12. After wiring, run an end-to-end test and verify the row is actually present in the Google Sheet before enabling the live waitlist.
+This is **not a bug in the write path**. GitHub Pages does not provide trustworthy server-side visitor geo, and locale/page language/timezone must not be used as fake country attribution.
 
-## Google Apps Script deployment dependency
-The user still needs to deploy the Apps Script Web App under their Google account and provide the resulting `/exec` URL. Until that URL is available, finish all code behind a disabled/configurable endpoint and stop before enabling production submission.
+Track this in GitHub issue **#1**:
+`[VeriScope] Replace waitlist country=unknown with reliable geo attribution`
+
+Constraints:
+- Do not infer country from browser language, page language, timezone alone, or `?market=`.
+- Do not store raw IP addresses in the Waitlist sheet.
+- Do not send email, photos, filenames, face data, or biometric data to analytics.
+- Country-level geo is sufficient for US vs Japan validation.
+- Keep `unknown` as the safe fallback when no trustworthy geo source is available.
+
+## Next milestone: Phase 2 market validation
+Track the working plan in GitHub issue **#2**:
+`[VeriScope] Phase 2 validation — analytics, Search Console, US/JP traffic test`
+
+Execution order:
+1. Connect production analytics and preserve the existing consent / privacy behavior.
+2. Measure the real funnel: `page_view → demo_start → source_open → pricing_view → signup_open → confirmed signup_complete`.
+3. Keep UTM fields and locale separate from country.
+4. Verify Search Console, submit the production sitemap, request indexing for EN + JA production URLs.
+5. Run small comparable US / Japan traffic tests with UTMs.
+6. Review confirmed Waitlist conversion, not raw page views, before changing positioning/pricing/product scope.
+
+Recommended production event set:
+- `page_view`
+- `demo_start`
+- `demo_view`
+- `source_open`
+- `pricing_view`
+- `signup_open`
+- `signup_complete`
+- `signup_duplicate`
+- `signup_error`
+
+`signup_complete` must only mean a confirmed persisted signup receipt, never a button click.
 
 ## Do not change
 - Do not modify the unrelated Hexo blog files at repository root.
@@ -81,7 +106,8 @@ The user still needs to deploy the Apps Script Web App under their Google accoun
 - Do not remove the fictional-sample disclosures.
 - Do not imply live face search is available.
 - Do not claim signup success without server confirmation.
-- Do not commit credentials, API keys, admin secrets, or Google tokens.
+- Do not commit credentials, API keys, admin secrets, Google tokens, or analytics secrets.
+- Do not store uploaded photos, filenames, face embeddings, biometric data, raw IPs, or other unnecessary PII for this validation stage.
 
-## Suggested Codex start command / instruction
-Use the repository above, checkout `master`, then work only in `people-intel-test/`. Read this file first, inspect `config.json`, `assets/app.js`, `index.html`, and `ja/index.html`, then implement the waitlist integration while preserving the V0.3.3 visual baseline.
+## Suggested Codex start instruction
+Use repository `Dylanz-lab/HE-ZHANG-J.github.io`, checkout `master`, then work only in `people-intel-test/`. Read this file first. Preserve the approved UI and the now-working Waitlist. The next engineering task is Phase 2 analytics/measurement, followed by Search Console and controlled US/JP traffic validation. Treat GitHub issues #1 and #2 as the current open work items.
