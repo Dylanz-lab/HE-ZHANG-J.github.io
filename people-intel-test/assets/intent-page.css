@@ -1,0 +1,96 @@
+/* VeriScope intent landing pages */
+.intent-body{background:#fafbfc;color:#182b2a}
+.intent-shell{width:min(1184px,calc(100% - 64px));margin:auto}
+.intent-nav{height:86px;display:flex;align-items:center;justify-content:space-between;gap:28px;border-bottom:1px solid #e3e8eb}
+.intent-nav-links{display:flex;align-items:center;gap:28px;font-size:15px}
+.intent-nav-links a:hover{color:#215d49}
+.intent-lang{display:flex;gap:9px;align-items:center;color:#65747a;font-size:14px}
+.intent-lang .active{color:#182b2a;font-weight:700}
+.intent-hero{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(420px,.97fr);gap:64px;align-items:center;padding:92px 0 74px}
+.intent-kicker{display:flex;gap:8px;align-items:center;text-transform:uppercase;letter-spacing:.14em;font-size:13px;font-weight:700;color:#41655b}
+.intent-kicker:before{content:"";width:7px;height:7px;border-radius:50%;background:#528374}
+.intent-hero h1{font-size:clamp(54px,5.2vw,76px);line-height:1.03;letter-spacing:-3.7px;font-weight:620;margin:24px 0 24px;max-width:760px}
+.intent-hero h1 em{font-style:normal;color:#326454}
+.intent-lead{font-size:21px;line-height:1.6;color:#65747a;max-width:660px;margin:0 0 30px}
+.intent-actions{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.intent-note{font-size:14px;line-height:1.55;color:#65747a;margin-top:18px;max-width:660px}
+.intent-stage{position:relative;min-height:510px;display:grid;place-items:center}
+.intent-orbit{position:absolute;width:430px;height:430px;border:1px solid #e4e9ed;border-radius:50%}
+.intent-orbit:after{content:"";position:absolute;inset:35px;border:1px dashed #e7ecef;border-radius:50%}
+.intent-photo{position:relative;z-index:2;width:286px;padding:11px 11px 16px;background:#fff;border:1px solid #fff;border-radius:22px;box-shadow:0 24px 70px #24364414;transform:rotate(-5deg)}
+.intent-photo img{width:264px;height:318px;object-fit:cover;border-radius:14px}
+.intent-photo-label{display:flex;align-items:center;justify-content:space-between;padding:14px 4px 0;font-size:13px;color:#65747a}
+.intent-photo-label b{color:#182b2a}
+.intent-floating{position:absolute;z-index:3;background:#fff;border:1px solid #e3e8eb;border-radius:16px;box-shadow:0 14px 38px #20334213;padding:17px 18px;max-width:270px}
+.intent-floating b{display:block;font-size:15px;line-height:1.35}
+.intent-floating small{display:block;font-size:12px;line-height:1.45;color:#65747a;margin-top:5px}
+.intent-floating.top{right:0;top:78px;transform:rotate(3deg)}
+.intent-floating.bottom{right:-10px;top:310px;transform:rotate(-2deg)}
+.intent-floating.count{left:0;bottom:30px;background:#eaf5ef;border-color:#fff}
+.intent-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid #e3e8eb;border-bottom:1px solid #e3e8eb;padding:24px 0}
+.intent-strip>div{display:flex;justify-content:center;gap:12px;align-items:center;color:#65747a;font-size:14px}
+.intent-strip b{color:#344e48;font-size:15px}
+.intent-section{padding:90px 0}
+.intent-heading{display:grid;grid-template-columns:1fr 380px;gap:42px;align-items:end;margin-bottom:34px}
+.intent-heading h2{font-size:46px;line-height:1.12;letter-spacing:-1.9px;font-weight:580;margin:15px 0 0}
+.intent-heading p{font-size:18px;line-height:1.65;color:#65747a;margin:0}
+.intent-demo{background:#fff;border:1px solid #dfe6e9;border-radius:22px;box-shadow:0 18px 65px #182b3a0b;overflow:hidden}
+.intent-demo-head{min-height:65px;border-bottom:1px solid #e7ecef;padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.intent-demo-head strong{font-size:16px}
+.intent-badge{display:inline-flex;padding:6px 9px;border-radius:7px;background:#edf5f1;color:#416a5b;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.intent-demo-body{display:grid;grid-template-columns:40% 60%;min-height:395px}
+.intent-source-list{padding:24px;border-right:1px solid #e7ecef;background:#fafbfc}
+.intent-source{display:grid;grid-template-columns:50px 1fr;gap:13px;align-items:center;padding:15px 13px;border-radius:13px;margin-bottom:9px}
+.intent-source.active{background:#eaf5ef;border:1px solid #bbd9cd}
+.intent-source img{width:50px;height:56px;object-fit:cover;border-radius:8px}
+.intent-source b{display:block;font-size:16px}
+.intent-source small{display:block;font-size:12px;color:#65747a;margin-top:4px}
+.intent-diff{padding:34px 36px}
+.intent-diff .mini{font-size:12px;color:#4c7465;margin-bottom:14px}
+.intent-diff h3{font-size:32px;line-height:1.2;letter-spacing:-.9px;margin:0 0 14px;font-weight:590}
+.intent-diff p{font-size:16px;line-height:1.67;color:#65747a;max-width:520px}
+.intent-facts{display:grid;grid-template-columns:1fr 1fr;gap:18px;border-top:1px solid #e8edef;padding-top:18px;margin-top:22px}
+.intent-facts small{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#65747a;margin-bottom:5px}
+.intent-facts strong{font-size:15px}
+.intent-warning{margin-top:22px;padding:15px 17px;border-radius:11px;background:#f8f5ee;color:#776449;font-size:14px;line-height:1.55}
+.intent-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:36px}
+.intent-step{display:flex;gap:14px}
+.intent-step span{font-size:13px;color:#5f8374}
+.intent-step h3{font-size:17px;margin:0 0 6px}
+.intent-step p{font-size:15px;color:#65747a;margin:0}
+.intent-context{background:#f0f3f5;border-top:1px solid #e5eaee;border-bottom:1px solid #e5eaee;padding:78px 0}
+.intent-context-grid{display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center}
+.intent-context-card{width:330px;margin:auto;background:#fff;border:1px solid #dfe5e9;border-radius:18px;padding:26px;box-shadow:0 18px 50px #2638460e;transform:rotate(-3deg)}
+.intent-context-card .profile{display:flex;gap:17px;align-items:center}
+.intent-context-card img{width:88px;height:106px;border-radius:10px;object-fit:cover}
+.intent-context-card b{font-size:17px}
+.intent-context-card p{font-size:13px;color:#65747a;margin:6px 0 0}
+.intent-context-note{margin:18px 0 0 82px;background:#f9f3e5;padding:16px 18px;max-width:260px;transform:rotate(4deg);font-size:15px;line-height:1.45}
+.intent-context-copy h2{font-size:42px;line-height:1.15;letter-spacing:-1.5px;font-weight:580;margin:15px 0 18px}
+.intent-context-copy p{font-size:18px;line-height:1.65;color:#65747a}
+.intent-price{display:grid;grid-template-columns:1fr 1fr;gap:92px;align-items:center}
+.intent-price h2{font-size:43px;line-height:1.13;letter-spacing:-1.7px;font-weight:580;margin:16px 0 20px}
+.intent-price p{font-size:18px;line-height:1.65;color:#65747a}
+.intent-price-card{background:#fff;border:1px solid #dfe7e7;border-radius:20px;padding:34px;box-shadow:0 18px 65px #182b3a0b}
+.intent-price-top{display:flex;justify-content:space-between;gap:20px;align-items:center}
+.intent-price-top h3{font-size:19px;margin:0}
+.intent-amount{font-size:58px;letter-spacing:-3px;font-weight:560;margin:23px 0 20px}
+.intent-amount span{font-size:14px;letter-spacing:0;color:#65747a}
+.intent-benefits{list-style:none;padding:0;margin:0 0 22px}
+.intent-benefits li{font-size:15px;line-height:1.55;margin:10px 0;padding-left:22px;position:relative}
+.intent-benefits li:before{content:"✓";position:absolute;left:0;color:#548574}
+.intent-faq{display:grid;grid-template-columns:330px 1fr;gap:74px;border-top:1px solid #e3e8eb;padding-top:56px}
+.intent-faq h2{font-size:36px;margin:15px 0 12px}
+.intent-faq>div:first-child p{font-size:16px;color:#65747a}
+.intent-faq details{border-bottom:1px solid #e3e8eb}
+.intent-faq summary{cursor:pointer;list-style:none;font-size:18px;font-weight:650;padding:22px 0}
+.intent-faq details p{font-size:16px;color:#65747a;padding:0 0 20px;margin:0}
+.intent-footer{margin-top:80px;border-top:1px solid #e3e8eb;padding:28px 0 38px;display:flex;align-items:center;justify-content:space-between;gap:20px;color:#65747a;font-size:13px}
+.intent-footer-links{display:flex;gap:18px}
+.intent-consent{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:100;background:#fff;border:1px solid #dfe7e7;border-radius:18px;box-shadow:0 24px 70px #1b303022;padding:18px 20px;width:min(720px,calc(100% - 32px));display:none}
+.intent-consent.show{display:block}
+.intent-consent strong{font-size:16px}
+.intent-consent p{font-size:14px;color:#65747a;margin:6px 0 13px}
+.intent-consent-actions{display:flex;gap:10px;flex-wrap:wrap}
+@media(max-width:900px){.intent-hero{grid-template-columns:1fr;gap:26px;padding-top:64px}.intent-stage{min-height:460px}.intent-heading{grid-template-columns:1fr}.intent-demo-body{grid-template-columns:1fr}.intent-source-list{border-right:0;border-bottom:1px solid #e7ecef}.intent-steps{grid-template-columns:1fr}.intent-context-grid,.intent-price{grid-template-columns:1fr;gap:48px}.intent-faq{grid-template-columns:1fr;gap:28px}.intent-strip{grid-template-columns:1fr}.intent-strip>div{justify-content:flex-start}.intent-nav-links{display:none}}
+@media(max-width:620px){.intent-shell{width:min(100% - 32px,1184px)}.intent-hero h1{font-size:48px;letter-spacing:-2.4px}.intent-lead{font-size:18px}.intent-stage{min-height:430px}.intent-photo{width:235px}.intent-photo img{width:213px;height:257px}.intent-floating{max-width:205px;padding:13px}.intent-floating.top{right:-6px;top:70px}.intent-floating.bottom{right:-10px;top:285px}.intent-floating.count{left:-5px;bottom:20px}.intent-heading h2{font-size:38px}.intent-demo-head{padding:14px 16px}.intent-source-list,.intent-diff{padding:20px}.intent-diff h3{font-size:28px}.intent-context{padding:64px 0}.intent-context-card{width:280px}.intent-context-note{margin-left:48px}.intent-price h2{font-size:38px}.intent-faq{padding-top:44px}.intent-footer{align-items:flex-start;flex-direction:column}}
