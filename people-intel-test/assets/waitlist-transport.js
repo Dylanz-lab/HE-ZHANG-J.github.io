@@ -28,10 +28,20 @@ var VeriScopeWaitlistTransport = (function () {
     }
   }
 
+  function isAppsScriptReceiptOrigin(value) {
+    try {
+      var url = new URL(value);
+      return url.protocol === 'https:' &&
+        (url.hostname === 'script.google.com' || /-script\.googleusercontent\.com$/.test(url.hostname));
+    } catch (_) {
+      return false;
+    }
+  }
+
   function isExpectedReceipt(event, iframe, requestId) {
     return !!event &&
       !!iframe &&
-      event.source === iframe.contentWindow &&
+      isAppsScriptReceiptOrigin(event.origin) &&
       !!event.data &&
       event.data.request_id === requestId &&
       core.isReceipt(event.data);
