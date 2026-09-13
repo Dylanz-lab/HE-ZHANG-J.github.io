@@ -9,16 +9,16 @@
   const qa = params.get('qa') === '1';
   const isFile = document.body.dataset.offline === '1' || ['file:', 'about:'].includes(location.protocol);
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let config = { mode: 'preview', waitlistEnabled: false, waitlistEndpoint: '', analyticsEnabled: false, apiBase: '', contactEmail: '' };
+  let config = { mode: 'preview', waitlistEnabled: false, waitlistEndpoint: '', analyticsEnabled: false, analyticsMeasurementId: '', apiBase: '', contactEmail: '' };
   let selected = 'profile';
-  let session = null;
   let submitting = false;
   let formIsLive = false;
+  let ga4LoadPromise = null;
   const consentKey = 'veriscope-v3-usage-consent';
   let consent = readStorage('localStorage', consentKey) || 'unset';
   const privacySignal = navigator.doNotTrack === '1' || navigator.globalPrivacyControl === true;
   const seen = new Set();
-  const diagnostic = { version: '0.3', mode: 'preview', collection: 'not-connected', qa, events: [] };
+  const diagnostic = { version: '0.3.5', mode: 'preview', collection: 'not-connected', qa, events: [] };
   window.veriscope = diagnostic;
   function readStorage(store, key) { try { return window[store].getItem(key); } catch (_) { return null; } }
   function writeStorage(store, key, value) { try { window[store].setItem(key, value); } catch (_) {} }
@@ -36,30 +36,82 @@
     const url = new URL('ja/', root); Object.entries(attribution).forEach(([k,v]) => url.searchParams.set(k,v));
     if (qa) url.searchParams.set('qa','1'); location.replace(url.href); return;
   }
-  function getSession() {
-    if (session) return session;
-    let previous = null;
-    try { previous = JSON.parse(readStorage('sessionStorage', 'veriscope-v3-session')); } catch (_) {}
-    if (previous && Date.now() - previous.time < 30 * 60 * 1000 && /^[a-f0-9-]{36}$/.test(previous.id)) session = previous.id;
-    else session = crypto.randomUUID();
-    writeStorage('sessionStorage', 'veriscope-v3-session', JSON.stringify({id:session,time:Date.now()}));
-    return session;
+  function measurementId() {
+    const id = String(config.analyticsMeasurementId || '').trim().toUpperCase();
+    return /^G-[A-Z0-9]+$/.test(id) ? id : '';
   }
-  function endpoint(path) { return new URL(path, config.apiBase ? new URL(config.apiBase, location.href) : root); }
+  function sanitizedPageLocation() {
+    const u = new URL(location.href);
+    u.search = '';
+    u.hash = '';
+    Object.entries(attribution).forEach(([k,v]) => u.searchParams.set(k,v));
+    return u.href;
+  }
+  function setGaDisabled(disabled) {
+    const id = measurementId();
+    if (id) window['ga-disable-' + id] = !!disabled;
+  }
+  function ensureGa4() {
+    const id = measurementId();
+    if (!config.analyticsEnabled || !id || consent !== 'granted' || privacySignal || qa || isFile) return Promise.resolve(false);
+    setGaDisabled(false);
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    if (ga4LoadPromise) return ga4LoadPromise;
+    window.gtag('js', new Date());
+    window.gtag('config', id, {
+      send_page_view: false,
+      page_location: sanitizedPageLocation(),
+      allow_google_signals: false,
+      allow_ad_personalization_signals: false
+    });
+    ga4LoadPromise = new Promise(resolve => {
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+      script.onload = () => resolve(true);
+      script.onerror = () => { ga4LoadPromise = null; resolve(false); };
+      document.head.appendChild(script);
+    });
+    return ga4LoadPromise;
+  }
+  function ga4Params(properties) {
+    const out = { ...properties, locale: t.locale, app_version: '0.3.5' };
+    Object.entries(attribution).forEach(([k,v]) => { out[k] = v; });
+    return out;
+  }
   function track(name, properties = {}, once = false) {
     const key = name + ':' + JSON.stringify(properties);
     if (once && seen.has(key)) return; seen.add(key);
-    const event = { event: name, properties, locale: t.locale, version: '0.3', attribution };
-    // This diagnostic log contains no input values and lives only in this tab.
+    const event = { event: name, properties, locale: t.locale, version: '0.3.5', attribution };
+    // This diagnostic log contains no form input values and lives only in this tab.
     diagnostic.events.push({ ...event, sent:false });
     if (diagnostic.events.length > 250) diagnostic.events.shift();
-    if (!config.analyticsEnabled || consent !== 'granted' || privacySignal || qa || isFile) return;
+    if (!config.analyticsEnabled || consent !== 'granted' || privacySignal || qa || isFile || !measurementId()) return;
     const log = diagnostic.events[diagnostic.events.length-1];
-    fetch(endpoint('api/events'), {
-      method:'POST', credentials:'omit', headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({...event,session_id:getSession()}), keepalive:true
-    }).then(async r => { if (!r.ok) throw Error('rejected'); const j=await r.json(); if (!j.ok) throw Error('rejected'); log.sent=true; diagnostic.collection='connected'; })
-      .catch(() => { diagnostic.collection='collection-error'; });
+    ensureGa4().then(ok => {
+      if (!ok || !window.gtag) { diagnostic.collection='collection-error'; return; }
+      window.gtag('event', name, ga4Params(properties));
+      log.sent = true;
+      diagnostic.collection = 'ga4';
+    }).catch(() => { diagnostic.collection='collection-error'; });
+  }
+  function updateMeasurementCopy() {
+    if (!config.analyticsEnabled || !measurementId()) return;
+    const privacyLead = document.querySelector('#privacyDialog .modal-body .lead');
+    const faqDetails = Array.from(document.querySelectorAll('#faq details'));
+    const measurementFaq = faqDetails.find(d => {
+      const s = d.querySelector('summary');
+      if (!s) return false;
+      return t.locale === 'ja' ? s.textContent.includes('計測') || s.textContent.includes('情報') : s.textContent.includes('measure');
+    });
+    if (t.locale === 'ja') {
+      if (privacyLead) privacyLead.textContent = 'この公開デモでは写真のアップロード、アカウント、決済は行いません。早期アクセス登録では、メールアドレス、選択した用途、言語、同意バージョン、提示プラン、キャンペーン情報のみを保存します。Google Analytics による任意の利用計測は「計測を許可」を選んだ後にだけ開始され、ページ操作、国レベルの地域、端末、流入元などを計測します。メールアドレス、写真、ファイル名、顔データは Analytics に送信しません。';
+      if (measurementFaq) measurementFaq.querySelector('p').textContent = '別途同意した場合のみ、Google Analytics でページやデモの操作、国レベルの地域、端末、流入元を計測します。メールアドレス、写真、ファイル名、顔データは Analytics に送信しません。同意しない場合、これらの利用イベントは送信されません。';
+    } else {
+      if (privacyLead) privacyLead.textContent = 'This public demo does not accept photo uploads, accounts, or payments. Early-access signup stores only the email, selected purpose, language, consent version, offered plan, and safe campaign labels. Optional Google Analytics measurement starts only after you choose “Allow measurement”; it measures page interactions, coarse country, device, and traffic-source data. Email addresses, photos, filenames, and face data are never sent to Analytics.';
+      if (measurementFaq) measurementFaq.querySelector('p').textContent = 'Only after your separate opt-in, Google Analytics measures page and demo interactions plus coarse country, device, and traffic source. It does not receive email addresses, photos, filenames, or face data. Without opt-in, these usage events are not sent.';
+    }
   }
   function show(id) { const d=$(id); if (!d.open) d.showModal(); }
   function close(id) { $(id).close(); }
@@ -155,17 +207,18 @@
   $('privacyOpen').addEventListener('click',()=>show('privacyDialog'));
   function openMeasurement() {
     $('consentPanel').hidden=false;
-    $('measureText').textContent=config.analyticsEnabled&&!privacySignal?t.measurebody:t.off;
-    $('analyticsAllow').hidden=!config.analyticsEnabled||privacySignal;
+    const connected = config.analyticsEnabled && !!measurementId() && !privacySignal;
+    $('measureText').textContent=connected?t.measurebody:t.off;
+    $('analyticsAllow').hidden=!connected;
   }
   $('measurementOpen').addEventListener('click',openMeasurement);
   $('analyticsDeny').addEventListener('click',()=>{
-    consent='denied';writeStorage('localStorage',consentKey,consent);session=null;
-    try{sessionStorage.removeItem('veriscope-v3-session');}catch(_){}
+    consent='denied';writeStorage('localStorage',consentKey,consent);setGaDisabled(true);
+    diagnostic.collection='disabled-by-user';
     $('consentPanel').hidden=true;
   });
   $('analyticsAllow').addEventListener('click',()=>{
-    consent='granted';writeStorage('localStorage',consentKey,consent);$('consentPanel').hidden=true;
+    consent='granted';writeStorage('localStorage',consentKey,consent);setGaDisabled(false);$('consentPanel').hidden=true;
     // Start only from consent onwards. Earlier demo events are NOT backfilled.
     track('page_view',{entry:'consent'},false);
   });
@@ -178,9 +231,11 @@
       try{const r=await fetch(new URL('config.json',root),{cache:'no-store',credentials:'omit'});if(r.ok){const c=await r.json();if(c.version==='0.3')config={...config,...c};}}catch(_){}
     }
     if(qa){config.analyticsEnabled=false;config.waitlistEnabled=false;config.mode='preview';}
-    configureForm();diagnostic.collection=config.analyticsEnabled?'awaiting-consent':'not-connected';
+    configureForm();updateMeasurementCopy();
+    diagnostic.collection=config.analyticsEnabled&&measurementId()?(consent==='granted'?'starting-ga4':'awaiting-consent'):'not-connected';
     track('page_view',{},false);
-    if(config.analyticsEnabled&&consent==='unset'&&!privacySignal)openMeasurement();
+    if(config.analyticsEnabled&&measurementId()&&consent==='unset'&&!privacySignal)openMeasurement();
+    if(consent==='denied')setGaDisabled(true);
   }
   init();
 })();
