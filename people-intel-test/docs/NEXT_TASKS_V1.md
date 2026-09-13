@@ -9,22 +9,23 @@
 ## Track B — Acquisition
 
 ### Theme tests
-- [ ] Build JA `/dating-check/` landing page (P0)
+- [x] Build EN `/dating-profile-check/` landing page (US/English P0)
+- [x] Build JA `/dating-check/` landing page (P0)
 - [ ] Build JA `/photo-check/` landing page (P0)
-- [ ] Keep current JA page as neutral/control
+- [ ] Keep current EN/JA pages as neutral/control
 - [ ] Defer `/relationship-check/` (cheating/suspicion framing) until baseline exists
 
 ### SEO
-- [ ] Unique title/meta/H1 for each intent page
-- [ ] Add new pages to sitemap
-- [ ] Add internal “Use cases” links from JA main page
+- [x] Unique title/meta/H1 for first dating intent pair
+- [x] Add first dating intent pair to sitemap
+- [ ] Add internal “Use cases” links from main EN/JA pages
 - [ ] Search Console inspect/request indexing for new pages
 - [ ] Publish first 3 high-intent guides
 
 ### Traffic
 - [ ] Create campaign-tagged URLs for X / short video / creator outreach
-- [ ] Send first controlled Japan traffic batch
-- [ ] Review GA4 by country=Japan, source, landing page
+- [ ] Send first controlled US + Japan traffic batches
+- [ ] Review GA4 by country, source, landing page
 - [ ] Compare confirmed signup conversion by theme
 
 ### Decision
